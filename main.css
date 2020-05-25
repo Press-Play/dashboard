@@ -1,0 +1,97 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a:link, a:visited, a:hover, a:active {
+  color: white;
+  text-decoration: none;
+}
+
+.container {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: red;
+  padding: 10px;
+  display: flex;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.left {
+  width: 30%;
+  height: 100%;
+  background-color: blue;
+}
+
+.middle {
+  width: 60%;
+  height: 100%;
+  background-color: green;
+}
+
+.right {
+  width: 30%;
+  height: 100%;
+  background-color: blue;
+}
+
+.module {
+  width: 100%;
+  background-color: pink;
+  margin-bottom: 10px;
+}
+
+.weather {
+  height: auto;
+}
+
+.clock {
+  height: auto;
+}
+
+.calendar {
+  height: 100%;
+}
+
+.focus {
+  height: 30%;
+}
+
+.task {
+  height: 50%;
+}
+
+.slideshow {
+  height: 30%;
+}
+
+.tasklist {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: black;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  color: white;
+}
+
+.module:last-child, .card:last-child {
+  margin-bottom: 0px;
+}
+
+.task .heading {
+  margin-top: 20px;
+  font-weight: bold;
+}
