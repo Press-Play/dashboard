@@ -1,6 +1,7 @@
 <html lang="en">
 <head>
     <title>Dashboard | {{.Title}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/styles/main.css">
 </head>
 <body>
@@ -42,18 +43,26 @@
                 </h2>
 
                 <p class="heading">Description</p>
-                <p>{{ .Desc }}</p>
+                {{if .Desc }}
+                    <p>{{ .Desc }}</p>
+                {{else}}
+                   <p>–</p>
+                {{end}}
 
                 <p class="heading">Comments</p>
-                {{ with .Actions }}
-                    {{ range . }}
-                        <p>{{ .Date }}</p>
-                        {{ with .Data }}
-                            <p>{{ .Text }}</p>
+                {{if .Actions }}
+                    {{ with .Actions }}
+                        {{ range . }}
+                            <p>{{ .Date }}</p>
+                            {{ with .Data }}
+                                <p>{{ .Text }}</p>
+                            {{ end }}
                         {{ end }}
                     {{ end }}
-                {{ end }}
-                <p class="heading">Actions</p>
+                {{else}}
+                   <p>–</p>
+                {{end}}
+
                 <form action="/done/" method="POST">
                     <input type="hidden" name="id" value="{{ .ID }}">
                     <input type="submit" value="Mark as Done">
