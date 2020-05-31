@@ -75,6 +75,10 @@
                 {{ range . }}
                     <div class="card" target="_blank">
                         <a href="{{ .URL }}">{{ .Name }}</a> 
+                        <form action="/" method="GET">
+                            <input type="hidden" name="id" value="{{ .ID }}">
+                            <input type="submit" value="Select">
+                        </form>
                     </div>
                 {{ end }}
             {{ end }}

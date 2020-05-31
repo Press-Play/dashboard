@@ -36,8 +36,18 @@ func dashboardHandler(client *trello.Client, w http.ResponseWriter, r *http.Requ
     }
 
     var selectedCard *trello.Card
-    for _, card := range cards {
-        selectedCard = card
+
+    id := r.FormValue("id")
+
+    if id == "" {
+        for _, card := range cards {
+            selectedCard = card
+        }
+    } else {
+        selectedCard, err = client.GetCard(id, trello.Defaults())
+        if err != nil {
+            log.Fatal(err)
+        }
     }
 
     // TODO: Push this function upstream.
