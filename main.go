@@ -40,9 +40,7 @@ func dashboardHandler(client *trello.Client, w http.ResponseWriter, r *http.Requ
     id := r.FormValue("id")
 
     if id == "" {
-        for _, card := range cards {
-            selectedCard = card
-        }
+        selectedCard = cards[0]
     } else {
         selectedCard, err = client.GetCard(id, trello.Defaults())
         if err != nil {

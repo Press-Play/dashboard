@@ -75,6 +75,7 @@ a:link, a:visited, a:hover, a:active {
   flex-direction: column;
   overflow: scroll;
   background-color: black;
+  padding: 10px
 }
 
 .focus-input {
@@ -117,6 +118,7 @@ a:link, a:visited, a:hover, a:active {
   position: absolute;
   z-index: 1;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+  pointer-events: none;
 }
 
 .card {
