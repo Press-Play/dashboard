@@ -32,7 +32,10 @@
     <div class="panel middle">
         <!-- Focus module -->
         <div class="module focus">
-            focus
+            <textarea id="focus" class="focus-input" name="focus"></textarea>
+            <div>
+                <input id="save" type="submit" value="Save">    
+            </div>
         </div>
 
         <!-- Task module -->
@@ -74,9 +77,11 @@
     <!-- Right pannel -->
     <div class="panel right">
         <!-- Slideshow module -->
+        <!--
         <div class="module slideshow">
-            slideshow
+            TODO.
         </div>
+        -->
 
         <!-- Tasklist module -->
         <div class="module tasklist">
@@ -92,8 +97,20 @@
                 {{ end }}
             {{ end }}
         </div>
+
+        <div class="tasklist-overlay"></div>
     </div>
 </div>
+
+<script type="text/javascript">
+    document.getElementById("save").addEventListener("click", function () {
+        var focus = document.getElementById("focus").value;
+        localStorage.setItem("focus", focus);
+        alert("Saved!");
+    } , false);
+
+    document.getElementById("focus").value = localStorage.getItem("focus");
+</script>
 
 </body>
 </html>

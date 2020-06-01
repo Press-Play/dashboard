@@ -5,6 +5,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+*:focus {
+  outline: none;
+}
+
 a:link, a:visited, a:hover, a:active {
   color: white;
   text-decoration: none;
@@ -15,8 +19,9 @@ a:link, a:visited, a:hover, a:active {
   left: 0;
   height: 100vh;
   width: 100vw;
-  background-color: red;
-  padding: 10px;
+  /*background-color: red;*/
+  background-color: #3a3a3a;
+  padding: 5px;
   display: flex;
   font-weight: 300;
 }
@@ -24,30 +29,31 @@ a:link, a:visited, a:hover, a:active {
 .panel {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 5px;
 }
 
 .left {
   width: 30%;
   height: 100%;
-  background-color: blue;
+  /*background-color: blue;*/
 }
 
 .middle {
   width: 60%;
   height: 100%;
-  background-color: green;
+  /*background-color: green;*/
 }
 
 .right {
   width: 30%;
   height: 100%;
-  background-color: blue;
+  /*background-color: blue;*/
+  position: relative;
 }
 
 .module {
   width: 100%;
-  background-color: pink;
+  /*background-color: pink;*/
   margin-bottom: 10px;
 }
 
@@ -65,6 +71,25 @@ a:link, a:visited, a:hover, a:active {
 
 .focus {
   height: 30%;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  background-color: black;
+}
+
+.focus-input {
+  padding: 10px;
+  background: rgba(0, 0, 0, 0);
+  height: auto;
+  width: 100%;
+  border: none;
+  font-size: 42px;
+  font-weight: 400px;
+  vertical-align: middle;
+  text-align: center;
+  resize: none;
+  margin-top: auto;
+  color: white;
 }
 
 .task {
@@ -83,6 +108,15 @@ a:link, a:visited, a:hover, a:active {
   display: flex;
   flex-direction: column;
   overflow: scroll;
+}
+
+.tasklist-overlay {
+  min-height: 250px;
+  width: calc(100% - 10px);
+  bottom: 0;
+  position: absolute;
+  z-index: 1;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
 }
 
 .card {
