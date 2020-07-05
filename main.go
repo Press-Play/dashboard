@@ -81,7 +81,7 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
         for _, item := range events.Items {
             date := item.Start.DateTime
             if date == "" {
-                    date = item.Start.Date
+                date = item.Start.Date
             }
             fmt.Printf("%v (%v)\n", item.Summary, date)
         }
@@ -89,10 +89,12 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
 
     data := struct {
         Title string
+        Events []*googlecalendar.Event
         Tasklist []*trello.Card
         Card *trello.Card
     }{
         Title: r.URL.Path,
+        Events: events.Items,
         Tasklist: cards,
         Card: selectedCard,
     }

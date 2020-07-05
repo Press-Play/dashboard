@@ -71,6 +71,8 @@ a:link, a:visited, a:hover, a:active {
 
 .calendar {
   height: 100%;
+  background-color: black;
+  color: white;
 }
 
 .focus {
