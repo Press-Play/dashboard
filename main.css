@@ -73,6 +73,56 @@ a:link, a:visited, a:hover, a:active {
   height: 100%;
   background-color: black;
   color: white;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.calendar-header {
+  height: 60px;
+  width: 100%;
+  background-color: pink;
+}
+
+.calendar-body {
+  height: calc(100% - 100px);
+  display: flex;
+  flex-direction: row;
+  overflow: scroll;
+}
+
+.calendar-footer {
+  height: 40px;
+  width: 100%;
+  background-color: pink;
+}
+
+.times {
+  background-color: red;
+  height: 100%;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.time {
+  background-color: green;
+  min-height: 30px;
+  max-height: 100px;
+  width: 100%;
+}
+
+.events {
+  background-color: blue;
+  height: 100%;
+  width: calc(100% - 50px);
+}
+
+.event {
+  /*min-height: 30px;*/
+  /*max-height: 100px;*/
+  background-color: teal;
 }
 
 .focus {

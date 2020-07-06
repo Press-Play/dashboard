@@ -66,7 +66,8 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     }
 
     // Load the calendar data.
-    tnow := time.Now().Local().Truncate(time.Hour * 24)
+    tnow := time.Now().Local()
+    tnow = time.Date(tnow.Year(), tnow.Month(), tnow.Day(), 0, 0, 0, 0, tnow.Location())
     tmin := tnow.Format(time.RFC3339)
     tmax := tnow.AddDate(0, 0, 1).Format(time.RFC3339)
     events, err := clients.calendarClient.Events.List("primary").ShowDeleted(false).
@@ -74,32 +75,48 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     if err != nil {
         log.Fatalf("Unable to retrieve next ten of the user's events: %v", err)
     }
+    fmt.Println("Events array:")
+    fmt.Println(events)
     fmt.Println("Upcoming events:")
+    var times []string
+
     if len(events.Items) == 0 {
         fmt.Println("No upcoming events found.")
     } else {
-        for _, item := range events.Items {
-            date := item.Start.DateTime
-            if date == "" {
-                date = item.Start.Date
-            }
-            fmt.Printf("%v (%v)\n", item.Summary, date)
+        // for _, item := range events.Items {
+        //     date := item.Start.DateTime
+        //     if date == "" {
+        //         date = item.Start.Date
+        //     }
+        //     fmt.Printf("%v (%v)\n", item.Summary, date)
+        // }
+        ttemp := tnow
+        for !ttemp.After(tnow.AddDate(0, 0, 1)) {
+            fmt.Println(ttemp.Format("3 PM"))
+            times = append(times, ttemp.Format("3 PM"))
+            ttemp = ttemp.Add(time.Hour)
         }
     }
-
+    // timeBetween(check, start, end time.Time)
     data := struct {
         Title string
         Events []*googlecalendar.Event
+        Times []string
         Tasklist []*trello.Card
         Card *trello.Card
     }{
         Title: r.URL.Path,
+        Times: times,
         Events: events.Items,
         Tasklist: cards,
         Card: selectedCard,
     }
     t, _ := template.ParseFiles("main.html")
     t.Execute(w, data)
+}
+
+func timeBetween(check, start, end time.Time) bool {
+    return check.After(start) && check.Before(end)
 }
 
 func getEnv(key string, defaultValue string) string {
