@@ -67,6 +67,7 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
 
     // Load the calendar data.
     tnow := time.Now().Local()
+    timeNow := float32(tnow.Hour()) + (float32(tnow.Minute()) / 60)
     tnow = time.Date(tnow.Year(), tnow.Month(), tnow.Day(), 0, 0, 0, 0, tnow.Location())
     tmin := tnow.Format(time.RFC3339)
     tmax := tnow.AddDate(0, 0, 1).Format(time.RFC3339)
@@ -119,11 +120,13 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     data := struct {
         Title string
         Events []*Event
+        TimeNow float32
         Times []string
         Tasklist []*trello.Card
         Card *trello.Card
     }{
         Title: r.URL.Path,
+        TimeNow: timeNow,
         Times: times,
         Events: sortedEvents,
         Tasklist: cards,
