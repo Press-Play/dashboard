@@ -120,12 +120,14 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     data := struct {
         Title string
         Events []*Event
+        DateNow string
         TimeNow float32
         Times []string
         Tasklist []*trello.Card
         Card *trello.Card
     }{
         Title: r.URL.Path,
+        DateNow: tnow.Format("Monday 2, January"),
         TimeNow: timeNow,
         Times: times,
         Events: sortedEvents,
@@ -215,6 +217,7 @@ func main() {
     http.Handle("/", &ClientHandler{clients, dashboardHandler})
     http.Handle("/done/", &ClientHandler{clients, doneHandler})
     http.Handle("/styles/", http.StripPrefix("/styles/", http.FileServer(http.Dir(""))))
+    http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir(""))))
 
     // Serve the webpage and listen for requests.
     log.Print("http://localhost:8080")
