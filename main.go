@@ -75,39 +75,57 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     if err != nil {
         log.Fatalf("Unable to retrieve next ten of the user's events: %v", err)
     }
-    fmt.Println("Events array:")
+    fmt.Println("Events object:")
     fmt.Println(events)
     fmt.Println("Upcoming events:")
     var times []string
+    var sortedEvents []*Event
 
     if len(events.Items) == 0 {
         fmt.Println("No upcoming events found.")
     } else {
-        // for _, item := range events.Items {
-        //     date := item.Start.DateTime
-        //     if date == "" {
-        //         date = item.Start.Date
-        //     }
-        //     fmt.Printf("%v (%v)\n", item.Summary, date)
-        // }
         ttemp := tnow
         for !ttemp.After(tnow.AddDate(0, 0, 1)) {
-            fmt.Println(ttemp.Format("3 PM"))
+            // fmt.Println(ttemp.Format("3 PM"))
             times = append(times, ttemp.Format("3 PM"))
+
+            appendedEvent := false;
+
+            // if this hour is equal to the start time, append to array
+            // if this hour is between the time (start inclusive, end exclusive), then add 1 to the last element
+            // else add an empty hour block
+            for _, item := range events.Items {
+                eventTime, _ := time.Parse(time.RFC3339, item.Start.DateTime)
+                if eventTime.Hour() == ttemp.Hour() {
+                    sortedEvents = append(sortedEvents,
+                        &Event{item.Summary, item.Start.DateTime, item.End.DateTime, true, 1})
+                    appendedEvent = true;
+                    break
+                }
+            }
+
+            if appendedEvent {
+                // timeBetween(check, start, end time.Time)
+                // if item.End.Date.Hour()
+                // TODO
+            } else {
+                sortedEvents = append(sortedEvents,
+                    &Event{"", "", "", false, 1})
+            }
             ttemp = ttemp.Add(time.Hour)
         }
     }
-    // timeBetween(check, start, end time.Time)
+
     data := struct {
         Title string
-        Events []*googlecalendar.Event
+        Events []*Event
         Times []string
         Tasklist []*trello.Card
         Card *trello.Card
     }{
         Title: r.URL.Path,
         Times: times,
-        Events: events.Items,
+        Events: sortedEvents,
         Tasklist: cards,
         Card: selectedCard,
     }
@@ -117,6 +135,14 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
 
 func timeBetween(check, start, end time.Time) bool {
     return check.After(start) && check.Before(end)
+}
+
+type Event struct {
+    Summary string
+    TimeStart string
+    TimeEnd string
+    Visible bool
+    Hours int
 }
 
 func getEnv(key string, defaultValue string) string {
@@ -153,7 +179,7 @@ func getTrelloConfig() *TrelloConfig {
     }
 }
 
-func NewClients(trelloClient  *trello.Client, calendarClient  *googlecalendar.Service) Clients {
+func NewClients(trelloClient *trello.Client, calendarClient *googlecalendar.Service) Clients {
     return Clients {
         trelloClient: trelloClient,
         calendarClient: calendarClient,

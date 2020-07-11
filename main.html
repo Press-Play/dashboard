@@ -36,10 +36,10 @@
                     {{ end }}
                 </div>
                 <div class="events">
-                    <div class="event" style="visibility: hidden min-height: 30px; max-height: 100px;"></div>
+                    <!-- <div class="event" style="visibility: hidden; min-height: calc(2*30px + 1*4px); background-color: none"></div> -->
                     {{ with .Events }}
                         {{ range . }}
-                            <div class="event" style="min-height: 30px; max-height: 100px;">
+                            <div class="event" style="{{ if .Visible }} {{ else }} visibility: hidden; {{end}}min-height: calc({{ .Hours }}*30px + ({{ .Hours }} - 1)*4px)">
                                 <p>{{ .Summary }}</p>
                             </div>
                         {{ end }}
