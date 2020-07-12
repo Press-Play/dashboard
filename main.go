@@ -86,7 +86,7 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
         fmt.Println("No upcoming events found.")
     } else {
         ttemp := tnow
-        for !ttemp.After(tnow.AddDate(0, 0, 1)) {
+        for !ttemp.After(tnow.AddDate(0, 0, 1).Add(-time.Hour)) {
             // fmt.Println(ttemp.Format("3 PM"))
             times = append(times, ttemp.Format("3 PM"))
 
@@ -106,9 +106,10 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
             }
 
             if appendedEvent {
-                // timeBetween(check, start, end time.Time)
-                // if item.End.Date.Hour()
-                // TODO
+                currentEventEnd, _ := time.Parse(time.RFC3339, sortedEvents[len(sortedEvents)-1].TimeEnd)
+                if currentEventEnd.Before(ttemp.Add(time.Hour)) {
+                    sortedEvents[len(sortedEvents)-1].Hours = sortedEvents[len(sortedEvents)-1].Hours + 1
+                }
             } else {
                 sortedEvents = append(sortedEvents,
                     &Event{"", "", "", false, 1})
@@ -138,16 +139,12 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     t.Execute(w, data)
 }
 
-func timeBetween(check, start, end time.Time) bool {
-    return check.After(start) && check.Before(end)
-}
-
 type Event struct {
     Summary string
     TimeStart string
     TimeEnd string
     Visible bool
-    Hours int
+    Hours float32
 }
 
 func getEnv(key string, defaultValue string) string {
