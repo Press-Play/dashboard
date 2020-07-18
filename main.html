@@ -45,7 +45,7 @@
                             </div>
                         {{ end }}
                     {{ end }}
-                    <div class="time-now" style="top: calc(({{ .TimeNow }} - 25)*34px - 2px)"></div>
+                    <div id="time-now" class="time-now" style="top: calc(({{ .TimeNow }} - 25)*34px - 2px)"></div>
                 </div>
             </div>
             <div class="calendar-footer">
@@ -138,6 +138,10 @@
     } , false);
 
     document.getElementById("focus").value = localStorage.getItem("focus");
+
+    window.onload = function onPageLoad() {
+        document.getElementById("time-now").scrollIntoView({behavior: 'smooth'});
+    }
 </script>
 
 </body>

@@ -39,25 +39,21 @@ a:link, a:visited, a:hover, a:active {
 .left {
   width: 30%;
   height: 100%;
-  /*background-color: blue;*/
 }
 
 .middle {
   width: 60%;
   height: 100%;
-  /*background-color: green;*/
 }
 
 .right {
   width: 30%;
   height: 100%;
-  /*background-color: blue;*/
   position: relative;
 }
 
 .module {
   width: 100%;
-  /*background-color: pink;*/
   margin-bottom: 10px;
 }
 
@@ -75,7 +71,7 @@ a:link, a:visited, a:hover, a:active {
   color: white;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* TODO: Need to actually fix this shit */
 }
 
 .calendar-header {
