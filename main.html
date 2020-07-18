@@ -138,14 +138,13 @@
 
     document.getElementById("focus").value = localStorage.getItem("focus");
 
-    window.onload = onPageLoad(function() {
-        // This is totally a hack, because there is some weird shit going on.
-        document.getElementById("calendar-container").scrollTo(0, 0);
-    });
-
-    function onPageLoad(callback) {
+    window.onload = function onPageLoad() {
         document.getElementById("time-now").scrollIntoView({behavior: 'smooth'});
-        callback();
+
+        // This is totally a hack, because there is some weird shit going on.
+        setTimeout(function resetCalendarContainer() {
+            document.getElementById("calendar-container").scrollTo(0, 0);
+        }, 500);
     }
 
 </script>
