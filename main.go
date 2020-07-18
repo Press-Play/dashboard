@@ -106,9 +106,19 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
             }
 
             if appendedEvent {
+                ttemp = ttemp.Add(time.Hour)
+                continue
+            }
+
+            // If last inserted was a visible event, then
+            if len(sortedEvents)-1 >= 0 && sortedEvents[len(sortedEvents)-1].Visible {
                 currentEventEnd, _ := time.Parse(time.RFC3339, sortedEvents[len(sortedEvents)-1].TimeEnd)
-                if currentEventEnd.Before(ttemp.Add(time.Hour)) {
+
+                if currentEventEnd.Before(ttemp.Add(time.Hour)) && currentEventEnd.After(ttemp) {
                     sortedEvents[len(sortedEvents)-1].Hours = sortedEvents[len(sortedEvents)-1].Hours + 1
+                } else {
+                    sortedEvents = append(sortedEvents,
+                        &Event{"", "", "", false, 1})
                 }
             } else {
                 sortedEvents = append(sortedEvents,
