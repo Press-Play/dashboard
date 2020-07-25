@@ -39,12 +39,12 @@
                 <div class="events">
                     {{ with .Events }}
                         {{ range . }}
-                            <div class="event" style="{{ if .Visible }} {{ else }} visibility: hidden; {{end}}min-height: calc({{ .Hours }}*30px + ({{ .Hours }} - 1)*4px)">
+                            <div class="event" style="{{ if .Visible }} {{ else }} visibility: hidden; {{end}}min-height: calc(2*{{ .Hours }}*19px + (2*{{ .Hours }} - 1)*4px)">
                                 <p>{{ .Summary }}</p>
                             </div>
                         {{ end }}
                     {{ end }}
-                    <div id="time-now" class="time-now" style="top: calc(({{ .TimeNow }} - 25)*34px - 2px)"></div>
+                    <div id="time-now" class="time-now" style="top: calc(({{ .TimeNow }} - 24)*46px)"></div>
                 </div>
             </div>
             <div class="calendar-footer">

@@ -5,6 +5,7 @@ import (
     "os"
     "time"
     "fmt"
+    "math"
     "net/http"
     "html/template"
     "github.com/adlio/trello"
@@ -86,9 +87,11 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
         fmt.Println("No upcoming events found.")
     } else {
         ttemp := tnow
-        for !ttemp.After(tnow.AddDate(0, 0, 1).Add(-time.Hour)) {
+        for !ttemp.After(tnow.AddDate(0, 0, 1).Add(-time.Hour / 2)) {
             // fmt.Println(ttemp.Format("3 PM"))
-            times = append(times, ttemp.Format("3 PM"))
+            if getHalfHour(ttemp) == 0 {
+                times = append(times, ttemp.Format("3 PM"))
+            }
 
             appendedEvent := false;
 
@@ -97,16 +100,16 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
             // else add an empty hour block
             for _, item := range events.Items {
                 eventTime, _ := time.Parse(time.RFC3339, item.Start.DateTime)
-                if eventTime.Hour() == ttemp.Hour() {
+                if eventTime.Hour() == ttemp.Hour() && getHalfHour(eventTime) == getHalfHour(ttemp) {
                     sortedEvents = append(sortedEvents,
-                        &Event{item.Summary, item.Start.DateTime, item.End.DateTime, true, 1})
+                        &Event{item.Summary, item.Start.DateTime, item.End.DateTime, true, 0.5})
                     appendedEvent = true;
                     break
                 }
             }
 
             if appendedEvent {
-                ttemp = ttemp.Add(time.Hour)
+                ttemp = ttemp.Add(time.Hour / 2)
                 continue
             }
 
@@ -114,17 +117,17 @@ func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
             if len(sortedEvents)-1 >= 0 && sortedEvents[len(sortedEvents)-1].Visible {
                 currentEventEnd, _ := time.Parse(time.RFC3339, sortedEvents[len(sortedEvents)-1].TimeEnd)
 
-                if currentEventEnd.Before(ttemp.Add(time.Hour)) && currentEventEnd.After(ttemp) {
-                    sortedEvents[len(sortedEvents)-1].Hours = sortedEvents[len(sortedEvents)-1].Hours + 1
+                if currentEventEnd.After(ttemp) {
+                    sortedEvents[len(sortedEvents)-1].Hours = sortedEvents[len(sortedEvents)-1].Hours + 0.5
                 } else {
                     sortedEvents = append(sortedEvents,
-                        &Event{"", "", "", false, 1})
+                        &Event{"", "", "", false, 0.5})
                 }
             } else {
                 sortedEvents = append(sortedEvents,
-                    &Event{"", "", "", false, 1})
+                    &Event{"", "", "", false, 0.5})
             }
-            ttemp = ttemp.Add(time.Hour)
+            ttemp = ttemp.Add(time.Hour / 2)
         }
     }
 
@@ -155,6 +158,10 @@ type Event struct {
     TimeEnd string
     Visible bool
     Hours float32
+}
+
+func getHalfHour(t time.Time) float32 {
+    return float32(math.Floor(float64(t.Minute()) / 30) * 30)
 }
 
 func getEnv(key string, defaultValue string) string {
