@@ -30,7 +30,7 @@ func doneHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
 
 func dashboardHandler(clients Clients, w http.ResponseWriter, r *http.Request) {
     // Get the list of next tasks.
-    list, err := clients.trelloClient.GetList("5a964a9ef272819fb87ebb15", trello.Defaults())
+    list, err := clients.trelloClient.GetList("63a0024b9a72fb001d5e9eba", trello.Defaults())
     if err != nil {
         log.Fatal(err)
     }
